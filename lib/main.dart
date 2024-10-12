@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uc_mas_app/Screens/homePage.dart';
 import 'package:uc_mas_app/Screens/login.dart';
+import 'package:uc_mas_app/Screens/profile.dart';
 import 'package:uc_mas_app/firebase_options.dart';
 import 'package:uc_mas_app/load_ui.dart';
 import 'package:uc_mas_app/Screens/register.dart';
@@ -55,7 +56,7 @@ class UCMASApp extends StatelessWidget {
           Login.id: (context) => const Login(),
           HomePage.id: (context) => HomePage(email: email ?? ''),
           //'/home/ranks':
-          //'/profile':
+          '/profile':(context)=>const Profile(),
           //'/profile/friends':
           //'/virtual-abacus':
           //'/level1-test':
