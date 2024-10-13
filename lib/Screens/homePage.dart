@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uc_mas_app/Screens/login.dart';
+import 'package:uc_mas_app/Screens/test_page.dart';
 
 class HomePage extends StatelessWidget {
   static const String id = 'home_page';
@@ -28,16 +29,6 @@ class BackgroundWithWidgets extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Stack(
         children: [
-          // Background image
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                    'images/background1.png'), // Your background image here
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
           // AppBar with username and profile avatar
           Positioned(
             top: 40,
@@ -156,7 +147,7 @@ class BackgroundWithWidgets extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => TestPage()),
+                      MaterialPageRoute(builder: (context) => const TestPage()),
                     );
                   },
                   child: const Text('Start Test'),
@@ -173,28 +164,5 @@ class BackgroundWithWidgets extends StatelessWidget {
   }
 }
 
-// Dummy Test Page
-class TestPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Test')),
-      body: const Center(
-        child: Text('Test Page Content Here', style: TextStyle(fontSize: 24)),
-      ),
-    );
-  }
-}
 
-// Dummy Score Page
-class ScorePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Score')),
-      body: const Center(
-        child: Text('Your Score: 90%', style: TextStyle(fontSize: 24)),
-      ),
-    );
-  }
-}
+
