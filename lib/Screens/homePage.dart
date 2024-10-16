@@ -4,24 +4,67 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uc_mas_app/Screens/login.dart';
 import 'package:uc_mas_app/Screens/test_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatelessWidget {
   static const String id = 'home_page';
   final String email;
 
   const HomePage({super.key, required this.email});
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BackgroundWithWidgets(),
+      body: CustomWidget(),
     );
   }
 }
 
-class BackgroundWithWidgets extends StatelessWidget {
-  String _user = "آية";
+class CustomWidget extends StatefulWidget {
+  CustomWidget({super.key});
 
-  BackgroundWithWidgets({super.key});
+  @override
+  _BackgroundWithWidgetsState createState() => _BackgroundWithWidgetsState();
+}
+
+class _BackgroundWithWidgetsState extends State<CustomWidget> {
+  String _user = "loading..."; 
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserName();
+  }
+
+  Future<void> _fetchUserName() async {
+    try {
+      // Get the current user ID from Firebase Authentication
+      String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+      // Fetch the user data from Firestore using the UID
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get();
+
+      // Check if the document exists and fetch the user's name
+      if (userDoc.exists) {
+        setState(() {
+          _user = userDoc['name'] ?? 'User'; // Fallback to 'User' if no name field
+        });
+      } else {
+        setState(() {
+          _user = 'User not found'; // Fallback if user doesn't exist
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _user = 'Error loading user';
+      });
+      print('Error fetching user data: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +81,8 @@ class BackgroundWithWidgets extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'أهلا $_user',
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                  'أهلا $_user', // Dynamic username from Firestore
+                  
                 ),
                 const SizedBox(width: 10),
                 // Profile icon
@@ -80,8 +120,7 @@ class BackgroundWithWidgets extends StatelessWidget {
                     prefixIconConstraints:
                         BoxConstraints(minWidth: 0, minHeight: 0),
                     contentPadding: EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 15), // Add padding to make it more balanced
+                        vertical: 10, horizontal: 15), // Add padding to balance
                     border: InputBorder.none,
                   ),
                 ),
@@ -110,8 +149,7 @@ class BackgroundWithWidgets extends StatelessWidget {
                             Text(
                               'أفضل 5 مستخدمين',
                               textAlign: TextAlign.right,
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
+                              
                             ),
                           ],
                         ),
@@ -129,9 +167,7 @@ class BackgroundWithWidgets extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 5),
                                 Text('المستخدم${index + 1}',
-                                    style: const TextStyle(
-                                        fontSize:
-                                            12)), // Reverse order of user names
+                                    ),
                               ],
                             );
                           }),
@@ -147,14 +183,13 @@ class BackgroundWithWidgets extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const TestPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const TestPage()),
                     );
                   },
                   child: const Text('Start Test'),
                 ),
                 const SizedBox(height: 10),
-
-                // Show Score Button
               ],
             ),
           ),
@@ -163,6 +198,3 @@ class BackgroundWithWidgets extends StatelessWidget {
     );
   }
 }
-
-
-
