@@ -231,22 +231,7 @@ class _RegisterState extends State<Register> {
                               if (data == null || data.isEmpty) {
                                 return 'لا تترك هذا الحقل فارغا';
                               }
-<<<<<<< HEAD
 
-=======
-                              if (!RegExp(r'[A-Z]').hasMatch(data)) {
-                                return 'كلمة المرور يجب ان تحتوي على حروف كبيرة';
-                              }
-                              if (!RegExp(r'[a-z]').hasMatch(data)) {
-                                return 'كلمة المرور يجب ان تحتوي على حروف صغيرة';
-                              }
-                              if (!RegExp(r'[0-9]').hasMatch(data)) {
-                                return 'كلمة المرور يجب ان تحتوي على ارقام';
-                              }
-                              if (!RegExp(r'[!@#\$&*~_-]').hasMatch(data)) {
-                                return 'كلمة المرور يجب ان تحتوي على حروف خاصة مثل !@#\$&*~_-';
-                              }
->>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
                               if (data.length < 8) {
                                 return 'كلمة المرور يجب ان تكون على الاقل من 8 حروف';
                               }
@@ -379,7 +364,6 @@ class _RegisterState extends State<Register> {
                                     isLoading = true;
                                   });
                                   try {
-<<<<<<< HEAD
                                     await saveUserData();
                                     await saveUserEmail(email!);
 
@@ -399,47 +383,6 @@ class _RegisterState extends State<Register> {
                                           HomePage(email: email!),
                                     ),
                                   );
-=======
-                                    UserCredential userCredential =
-                                        await FirebaseAuth.instance
-                                            .createUserWithEmailAndPassword(
-                                                email: email!,
-                                                password: password!);
-                                    User? user = userCredential.user;
-
-                                    if (user != null) {
-                                      users.add({
-                                        'name': name,
-                                        'email': email,
-                                        'country': selectedCountry,
-                                        'governorate': selectedGovernorate,
-                                      });
-                                    }
-
-                                    final SharedPreferences prefs =
-                                        await SharedPreferences.getInstance();
-                                    prefs.setBool('isLoggedIn', true);
-
-                                    showSnackBar(
-                                      context,
-                                      'تم إنشاء الحساب بنجاح',
-                                    );
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => HomePage(
-                                                  email: email!,
-                                                )));
-                                  } catch (e) {
-                                    showSnackBar(
-                                      context,
-                                      'حدث خطأ: $e',
-                                    );
-                                  }
-                                  setState(() {
-                                    isLoading = false;
-                                  });
->>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
                                 }
                               },
                               style: ElevatedButton.styleFrom(
@@ -487,7 +430,6 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
-<<<<<<< HEAD
 
   Future<void> saveUserEmail(String email) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -544,6 +486,4 @@ class _RegisterState extends State<Register> {
       );
     }
   }
-=======
->>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
 }

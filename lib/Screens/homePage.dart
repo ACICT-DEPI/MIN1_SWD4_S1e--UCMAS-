@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 // ignore_for_file: file_names, use_build_context_synchronously, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
@@ -16,6 +17,16 @@ import 'package:uc_mas_app/Screens/test_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 >>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
+=======
+// ignore_for_file: file_names, use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:uc_mas_app/Screens/login.dart';
+import 'package:uc_mas_app/Screens/test_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uc_mas_app/components/showSnackbar.dart';
+>>>>>>> 3c435fa (رسالة التعديل الخاصة بك)
 
 class HomePage extends StatelessWidget {
   static const String id = 'home_page';
@@ -23,16 +34,22 @@ class HomePage extends StatelessWidget {
 
   const HomePage({super.key, required this.email});
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3c435fa (رسالة التعديل الخاصة بك)
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+<<<<<<< HEAD
 =======
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 >>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
+=======
+>>>>>>> 3c435fa (رسالة التعديل الخاصة بك)
       body: CustomWidget(),
     );
   }
@@ -40,10 +57,14 @@ class HomePage extends StatelessWidget {
 
 class CustomWidget extends StatefulWidget {
 <<<<<<< HEAD
+<<<<<<< HEAD
   const CustomWidget({super.key});
 =======
   CustomWidget({super.key});
 >>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
+=======
+  const CustomWidget({super.key});
+>>>>>>> 3c435fa (رسالة التعديل الخاصة بك)
 
   @override
   _BackgroundWithWidgetsState createState() => _BackgroundWithWidgetsState();
@@ -51,10 +72,14 @@ class CustomWidget extends StatefulWidget {
 
 class _BackgroundWithWidgetsState extends State<CustomWidget> {
 <<<<<<< HEAD
+<<<<<<< HEAD
   String _user = "loading...";
 =======
   String _user = "loading..."; 
 >>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
+=======
+  String _user = "loading...";
+>>>>>>> 3c435fa (رسالة التعديل الخاصة بك)
 
   @override
   void initState() {
@@ -65,6 +90,9 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
   Future<void> _fetchUserName() async {
     try {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3c435fa (رسالة التعديل الخاصة بك)
       // Get the email from the HomePage constructor
       String email =
           (context.findAncestorWidgetOfExactType<HomePage>() as HomePage).email;
@@ -80,6 +108,7 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
         setState(() {
           _user = userQuery.docs.first['name'] ??
               'User'; // Fallback to 'User' if no name field
+<<<<<<< HEAD
 =======
       // Get the current user ID from Firebase Authentication
       String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
@@ -95,6 +124,8 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
         setState(() {
           _user = userDoc['name'] ?? 'User'; // Fallback to 'User' if no name field
 >>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
+=======
+>>>>>>> 3c435fa (رسالة التعديل الخاصة بك)
         });
       } else {
         setState(() {
@@ -106,10 +137,14 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
         _user = 'Error loading user';
       });
 <<<<<<< HEAD
+<<<<<<< HEAD
       showSnackBar(context, e.toString());
 =======
       print('Error fetching user data: $e');
 >>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
+=======
+      showSnackBar(context, e.toString());
+>>>>>>> 3c435fa (رسالة التعديل الخاصة بك)
     }
   }
 
@@ -127,6 +162,7 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+<<<<<<< HEAD
                 Text(
                   'أهلا $_user', // Dynamic username from Firestore
 <<<<<<< HEAD
@@ -145,6 +181,38 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                     backgroundImage: AssetImage(
                         'images/user.png'), // Your profile image here
                   ),
+=======
+                // Profile icon
+
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/profile');
+                      },
+                      child: const CircleAvatar(
+                        radius: 25,
+                        backgroundImage: AssetImage(
+                            'images/user.png'), // Your profile image here
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      'أهلا $_user', // Dynamic username from Firestore
+                    ),
+                  ],
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.logout,
+                    color: Color(0xFF3F4C5C),
+                  ),
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (c) => const Login()));
+                  },
+>>>>>>> 3c435fa (رسالة التعديل الخاصة بك)
                 ),
               ],
             ),
@@ -200,9 +268,12 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                               'أفضل 5 مستخدمين',
                               textAlign: TextAlign.right,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                               
 >>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
+=======
+>>>>>>> 3c435fa (رسالة التعديل الخاصة بك)
                             ),
                           ],
                         ),
@@ -220,6 +291,7 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                                 ),
                                 const SizedBox(height: 5),
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 Text(
                                   'المستخدم${index + 1}',
                                 ),
@@ -227,6 +299,11 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                                 Text('المستخدم${index + 1}',
                                     ),
 >>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
+=======
+                                Text(
+                                  'المستخدم${index + 1}',
+                                ),
+>>>>>>> 3c435fa (رسالة التعديل الخاصة بك)
                               ],
                             );
                           }),
@@ -243,11 +320,15 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                     Navigator.push(
                       context,
 <<<<<<< HEAD
+<<<<<<< HEAD
                       MaterialPageRoute(builder: (context) => const TestPage()),
 =======
                       MaterialPageRoute(
                           builder: (context) => const TestPage()),
 >>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
+=======
+                      MaterialPageRoute(builder: (context) => const TestPage()),
+>>>>>>> 3c435fa (رسالة التعديل الخاصة بك)
                     );
                   },
                   child: const Text('Start Test'),
