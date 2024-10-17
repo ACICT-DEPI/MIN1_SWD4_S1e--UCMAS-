@@ -30,6 +30,8 @@ class CustomWidget extends StatefulWidget {
 
 class _BackgroundWithWidgetsState extends State<CustomWidget> {
   String _user = "loading...";
+  TextEditingController _searchController = TextEditingController();
+  List<DocumentSnapshot> _searchResults = []; // Store search results
 
   @override
   void initState() {
@@ -52,8 +54,7 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
       // Check if the query returned any documents
       if (userQuery.docs.isNotEmpty) {
         setState(() {
-          _user = userQuery.docs.first['name'] ??
-              'User'; // Fallback to 'User' if no name field
+          _user = userQuery.docs.first['name'] ?? 'User'; // Fallback to 'User' if no name field
         });
       } else {
         setState(() {
@@ -65,6 +66,30 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
         _user = 'Error loading user';
       });
       showSnackBar(context, e.toString());
+    }
+  }
+
+  Future<void> _searchUsers(String query) async {
+    if (query.isEmpty) {
+      setState(() {
+        _searchResults = [];
+      });
+      return;
+    }
+
+    try {
+      // Perform Firestore query to search users based on name
+      QuerySnapshot searchSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('name', isGreaterThanOrEqualTo: query)
+          .where('name', isLessThanOrEqualTo: '$query\uf8ff') // For prefix matching
+          .get();
+
+      setState(() {
+        _searchResults = searchSnapshot.docs;
+      });
+    } catch (e) {
+      print('Error searching users: $e');
     }
   }
 
@@ -90,8 +115,7 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                       },
                       child: const CircleAvatar(
                         radius: 25,
-                        backgroundImage: AssetImage(
-                            'images/user.png'), // Your profile image here
+                        backgroundImage: AssetImage('images/user.png'), // Your profile image here
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -124,11 +148,15 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                 color: Colors.white.withOpacity(0.9),
                 borderRadius: BorderRadius.circular(25),
               ),
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: TextField(
+                  controller: _searchController,
                   textAlign: TextAlign.right, // Align text to the right
-                  decoration: InputDecoration(
+                  onChanged: (value) {
+                    _searchUsers(value); // Trigger search on text change
+                  },
+                  decoration: const InputDecoration(
                     hintText: 'البحث',
                     hintTextDirection: TextDirection.rtl, // Text direction RTL
                     prefixIcon: Icon(Icons.search, color: Colors.grey),
@@ -142,9 +170,33 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
               ),
             ),
           ),
-          // Floating Card with Top 5 Users
+          // Search Results List
           Positioned(
             top: 180,
+            left: 20,
+            right: 20,
+            child: _searchResults.isNotEmpty
+                ? Container(
+                    color: Colors.white.withOpacity(0.9),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _searchResults.length,
+                      itemBuilder: (context, index) {
+                        var user = _searchResults[index].data() as Map<String, dynamic>;
+                        return ListTile(
+                          title: Text(user['name']),
+                          leading: CircleAvatar(
+                            backgroundImage: AssetImage('images/user.png'), // Default avatar
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : Container(), // Empty container if no results
+          ),
+          // Floating Card with Top 5 Users
+          Positioned(
+            top: 300,
             left: 20,
             right: 20,
             child: Column(

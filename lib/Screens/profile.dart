@@ -213,11 +213,13 @@ class _ProfileState extends State<Profile> {
                                   MaterialPageRoute(
                                       builder: (c) => const Login()));
                             },
-                            child: const Text(
-                              'تسجيل خروج',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                            child: Center(
+                              child: const Text(
+                                'تسجيل خروج',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
