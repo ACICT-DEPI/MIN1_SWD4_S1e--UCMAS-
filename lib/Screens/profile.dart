@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 // ignore_for_file: library_private_types_in_public_api
 
+=======
+>>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +28,10 @@ class _ProfileState extends State<Profile> {
     getCurrentUser();
   }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
   void getCurrentUser() async {
     User? currentUser = FirebaseAuth.instance.currentUser;
 
@@ -32,7 +39,11 @@ class _ProfileState extends State<Profile> {
       setState(() {
         user = currentUser;
       });
+<<<<<<< HEAD
       await fetchUserDataByEmail();
+=======
+      await fetchUserData();
+>>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
     } else {
       setState(() {
         isLoading = false;
@@ -46,6 +57,7 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+<<<<<<< HEAD
   Future<void> fetchUserDataByEmail() async {
     try {
       // Log the user's email
@@ -63,11 +75,35 @@ class _ProfileState extends State<Profile> {
 
         setState(() {
           userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+=======
+
+  Future<void> fetchUserData() async {
+    try {
+      // Log the user's uid
+      print('Fetching data for user: ${user!.uid}');
+
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .get();
+
+      // Check if the document exists
+      if (doc.exists) {
+        // Log the retrieved document data
+        print('User data found: ${doc.data()}');
+
+        setState(() {
+          userData = doc.data() as Map<String, dynamic>;
+>>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
           isLoading = false;
         });
       } else {
         // Log if document is not found
+<<<<<<< HEAD
         print('No user data found for email: ${user!.email}');
+=======
+        print('No user data found for user: ${user!.uid}');
+>>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
 
         setState(() {
           isLoading = false;
@@ -190,7 +226,11 @@ class _ProfileState extends State<Profile> {
                               ),
                               const SizedBox(height: 10),
                               Text(
+<<<<<<< HEAD
                                 'المدينة: ${userData!['governorate'] ?? 'No governrate'}',
+=======
+                              'المدينة: ${userData!['governrate'] ?? 'No governrate'}',
+>>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
                                 style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 10),
@@ -223,4 +263,8 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 42dcd223373840b54b7a88febd64609498d5f698
