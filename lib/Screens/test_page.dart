@@ -160,7 +160,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
     final screenSize = min(
         MediaQuery.of(context).size.width, MediaQuery.of(context).size.height);
     final isRotate =
-        MediaQuery.of(context).size.width > MediaQuery.of(context).size.height;
+        MediaQuery.of(context).size.width > MediaQuery.of(context).size.height-50;
 
     if (_timeRemaining != 0) {
       _controller.forward();
@@ -247,13 +247,22 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
                 ),
               ),
               Expanded(
-                child: LayoutGrid(
-                  columnSizes: isRotate ? [auto, auto] : [auto],
-                  rowSizes: isRotate ? [auto] : [auto, auto],
-                  rowGap: 10,
-                  columnGap: 20,
-                  children: _buildTestUI(screenSize),
-                ),
+                // child: LayoutGrid(
+                //   columnSizes: isRotate ? [auto, auto] : [auto],
+                //   rowSizes: isRotate ? [auto] : [auto, auto],
+                //   rowGap: 10,
+                //   columnGap: 20,
+                //   children: _buildTestUI(screenSize,isRotate),
+                // ),
+                  child:
+                  // MediaQuery.of(context).size.height<200?
+                  // SingleChildScrollView(
+                  //     child: Column(children:_buildTestUI(screenSize,isRotate))
+                  // )
+                  //     :
+                  isRotate?
+                    Row(children: _buildTestUI(screenSize,isRotate)):
+                    Column(children:  _buildTestUI(screenSize,isRotate)),
               ),
             ],
           ),
@@ -262,73 +271,87 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
     );
   }
 
-  List<Widget> _buildTestUI(double screenSize) {
+  List<Widget> _buildTestUI(double screenSize,bool isRotate) {
     return [
-      Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 2),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: IntrinsicWidth(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: _testColor, width: 2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(screenSize * .02),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ..._questionList.map((number) => Text(
-                                '$number',
-                                style: TextStyle(fontSize: screenSize * 0.05),
-                              )),
-                          SizedBox(height: screenSize * .02),
-                          Container(
-                            height: screenSize * 0.08,
-                            width: screenSize * 0.11,
-                            decoration: BoxDecoration(
-                              color: _testColor,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Center(
-                              child: Text(
-                                _enteredAnswer,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
+      Expanded(
+        flex: 10,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black, width: 2),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: IntrinsicWidth(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: _testColor, width: 2),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(screenSize * .02),
+                          child: Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ..._questionList.map((number) => Text(
+                                      '$number',
+                                      style: TextStyle(fontSize: screenSize * 0.04),
+                                    )),
+                                const Flexible(child: SizedBox()),
+                                Flexible(
+                                  child: Container(
+                                    height: screenSize * 0.08,
+                                    width: screenSize * 0.11,
+                                    decoration: BoxDecoration(
+                                      color: _testColor,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        _enteredAnswer,
+                                        style: TextStyle(
+                                            fontSize: screenSize * 0.04,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
-      LayoutGrid(
-        columnSizes: [1.5.fr, 1.5.fr, 1.5.fr],
-        rowSizes: const [auto, auto, auto, auto],
-        rowGap: 1,
-        columnGap: 10,
-        children: [
-          ...List.generate(9, (index) {
-            return _buildNumberButton(index + 1, screenSize - 100);
-          }),
-          const SizedBox(),
-          _buildNumberButton(0, screenSize - 100),
-          _buildConfirmButton(screenSize - 100),
-        ],
+      const Expanded(flex:1,child: SizedBox()),
+      Expanded(
+        flex: 10,
+        child: LayoutGrid(
+          columnSizes: [1.5.fr, 1.5.fr, 1.5.fr],
+          rowSizes: const [auto, auto, auto, auto],
+          rowGap: 1,
+          columnGap: 10,
+          children: [
+            ...List.generate(9, (index) {
+              return _buildNumberButton(index + 1, screenSize - (isRotate?100:250));
+            }),
+            const SizedBox(),
+            _buildNumberButton(0, screenSize - (isRotate?100:250)),
+            _buildConfirmButton(screenSize - (isRotate?100:250)),
+          ],
+        ),
       ),
     ];
   }
