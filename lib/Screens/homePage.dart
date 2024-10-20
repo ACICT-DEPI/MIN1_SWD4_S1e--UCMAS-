@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:uc_mas_app/Screens/login.dart';
 import 'package:uc_mas_app/Screens/test_page.dart';
 import 'package:uc_mas_app/components/showSnackbar.dart';
+import 'package:uc_mas_app/components/test_types.dart';
 
 class HomePage extends StatelessWidget {
   static const String id = 'home_page';
@@ -54,7 +55,8 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
       // Check if the query returned any documents
       if (userQuery.docs.isNotEmpty) {
         setState(() {
-          _user = userQuery.docs.first['name'] ?? 'User'; // Fallback to 'User' if no name field
+          _user = userQuery.docs.first['name'] ??
+              'User'; // Fallback to 'User' if no name field
         });
       } else {
         setState(() {
@@ -82,7 +84,8 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
       QuerySnapshot searchSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .where('name', isGreaterThanOrEqualTo: query)
-          .where('name', isLessThanOrEqualTo: '$query\uf8ff') // For prefix matching
+          .where('name',
+              isLessThanOrEqualTo: '$query\uf8ff') // For prefix matching
           .get();
 
       setState(() {
@@ -115,7 +118,8 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                       },
                       child: const CircleAvatar(
                         radius: 25,
-                        backgroundImage: AssetImage('images/user.png'), // Your profile image here
+                        backgroundImage: AssetImage(
+                            'images/user.png'), // Your profile image here
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -158,12 +162,14 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                   },
                   decoration: const InputDecoration(
                     hintText: 'البحث',
-                    hintTextDirection: TextDirection.rtl, // Text direction RTL
+                    hintTextDirection: TextDirection.rtl,
+                    // Text direction RTL
                     prefixIcon: Icon(Icons.search, color: Colors.grey),
                     prefixIconConstraints:
                         BoxConstraints(minWidth: 0, minHeight: 0),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15), // Add padding to balance
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    // Add padding to balance
                     border: InputBorder.none,
                   ),
                 ),
@@ -182,11 +188,13 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                       shrinkWrap: true,
                       itemCount: _searchResults.length,
                       itemBuilder: (context, index) {
-                        var user = _searchResults[index].data() as Map<String, dynamic>;
+                        var user = _searchResults[index].data()
+                            as Map<String, dynamic>;
                         return ListTile(
                           title: Text(user['name']),
                           leading: CircleAvatar(
-                            backgroundImage: AssetImage('images/user.png'), // Default avatar
+                            backgroundImage:
+                                AssetImage('images/user.png'), // Default avatar
                           ),
                         );
                       },
@@ -248,12 +256,78 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                 // Start Test Button
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const TestPage()),
-                    );
+                    showDialog(
+                        context: context,
+                        builder: (dialogContext) => AlertDialog(
+                              title: const Text(
+                                'اختر نوع الاختبار',
+                                textDirection: TextDirection.rtl,
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(dialogContext);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const TestPage(
+                                                testType: TestType.level1_1,
+                                              )),
+                                    );
+                                  },
+                                  style: const ButtonStyle(
+                                    alignment: Alignment.centerRight,
+                                  ),
+                                  child: const Text(
+                                    'المستوى الاول I',
+                                    textDirection: TextDirection.rtl,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(dialogContext);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const TestPage(
+                                                testType: TestType.level1_2,
+                                              )),
+                                    );
+                                  },
+                                  style: const ButtonStyle(
+                                    alignment: Alignment.centerRight,
+                                  ),
+                                  child: const Text(
+                                    'المستوى الاول II',
+                                    textDirection: TextDirection.rtl,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(dialogContext);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const TestPage(
+                                                testType: TestType.level1,
+                                              )),
+                                    );
+                                  },
+                                  style: const ButtonStyle(
+                                    alignment: Alignment.centerRight,
+                                  ),
+                                  child: const Text(
+                                    'المستوى الاول III',
+                                    textDirection: TextDirection.rtl,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                              ],
+                            ));
                   },
-                  child: const Text('Start Test'),
+                  child: const Text('ابدأ الاختبار'),
                 ),
                 const SizedBox(height: 10),
               ],

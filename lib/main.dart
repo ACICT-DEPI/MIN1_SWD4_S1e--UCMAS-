@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uc_mas_app/Screens/homePage.dart';
 import 'package:uc_mas_app/Screens/login.dart';
 import 'package:uc_mas_app/Screens/profile.dart';
+import 'package:uc_mas_app/Screens/virtual_abacus.dart';
 import 'package:uc_mas_app/firebase_options.dart';
 import 'package:uc_mas_app/load_ui.dart';
 import 'package:uc_mas_app/Screens/register.dart';
@@ -58,7 +59,7 @@ class UCMASApp extends StatelessWidget {
           //'/home/ranks':
           '/profile':(context)=>const Profile(),
           //'/profile/friends':
-          //'/virtual-abacus':
+          '/virtual-abacus': (context) => const VirtualAbacus(),
           //'/level1-test':
           //'/level2-test':
           //'/mixed-test':
