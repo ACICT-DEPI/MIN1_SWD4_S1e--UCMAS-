@@ -151,13 +151,7 @@ class _ProfileState extends State<Profile> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Text(
-                                    userData!['email'] ?? 'No Email',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
+                                  
                                 ],
                               ),
                             ],

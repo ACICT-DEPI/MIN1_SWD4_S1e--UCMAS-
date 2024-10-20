@@ -128,17 +128,35 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                     ),
                   ],
                 ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.logout,
-                    color: Color(0xFF3F4C5C),
-                  ),
-                  onPressed: () async {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (c) => const Login()));
-                  },
-                ),
+                Row(
+                  children: [
+                    InkWell(
+                      child: Container(
+                        width: 50.0,
+                        height: 50.0,
+                        child: Image.asset(
+                          'images/counter.png',
+                          fit: BoxFit
+                              .contain, // Keeps aspect ratio, scales down to fit inside the container
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/virtual-abacus');
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.logout,
+                        color: Color(0xFF3F4C5C),
+                      ),
+                      onPressed: () async {
+                        await FirebaseAuth.instance.signOut();
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (c) => const Login()));
+                      },
+                    ),
+                  ],
+                )
               ],
             ),
           ),
@@ -204,7 +222,7 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
           ),
           // Floating Card with Top 5 Users
           Positioned(
-            top: 300,
+            top: 200,
             left: 20,
             right: 20,
             child: Column(
@@ -228,25 +246,37 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                           ],
                         ),
                         const SizedBox(height: 10),
-                        // Reverse the order of the user avatars
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: List.generate(5, (index) {
-                            return Column(
-                              children: [
-                                CircleAvatar(
-                                  radius: 25,
-                                  backgroundImage: AssetImage(
-                                      'images/user${index + 1}.png'), // Reverse order of user images
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  'المستخدم${index + 1}',
-                                ),
-                              ],
-                            );
-                          }),
-                        ),
+                        OverflowBar(
+                          alignment: MainAxisAlignment.center,
+                          overflowSpacing: 20.0,
+                          spacing: 30.0,
+                          children: [
+                            Wrap(
+                              alignment: WrapAlignment.center,
+                              spacing: 30.0,
+                              runSpacing: 20.0,
+                              children: List.generate(5, (index) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 25,
+                                      backgroundImage: AssetImage(
+                                        'images/user${index + 1}.png',
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'المستخدم ${index + 1}',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                  ],
+                                );
+                              }),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
