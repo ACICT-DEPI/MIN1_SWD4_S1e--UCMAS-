@@ -15,12 +15,14 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
+  //int _timeRemaining = 4; // for test
   int _timeRemaining = 480; // 10 minutes in seconds
   int _questionIndex = 0;
-  int _wrongCount = 0;
+  List _wrongAnswer = [];
+  List _correctAnswer = [];
   bool _submitEnabled = false;
-  List<List<int>> _wrongAnswers = [];
-  String _result = "", _enteredAnswer = "";
+  List<List<int>> _wrongAnswersQuestions = [];
+  String _result = "", _enteredAnswers = "";
   late Iterable<int> _questionList;
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -58,9 +60,12 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
           context,
           MaterialPageRoute(
             builder: (context) => ResultPage(
-                correctCount: _questionIndex - _wrongCount,
-                wrongCount: _wrongCount,
-                wrongAnswers: _wrongAnswers),
+                correctCount: _questionIndex - _wrongAnswer.length-1,
+                wrongAnswers: _wrongAnswer,
+                correctAnswers: _correctAnswer,
+                wrongAnswersQuestion: _wrongAnswersQuestions,
+                resultColor: _testColor),
+
           ),
         );
       }
@@ -71,12 +76,12 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
     int testSize = (_questionIndex <= 30
         ? 3
         : _questionIndex <= 70
-            ? 4
-            : _questionIndex <= 120
-                ? 5
-                : _questionIndex <= 180
-                    ? 6
-                    : 7);
+        ? 4
+        : _questionIndex <= 120
+        ? 5
+        : _questionIndex <= 180
+        ? 6
+        : 7);
     int currentNum = _numbers[random.nextInt(8) + 9];
     int sum = currentNum;
     late List<int> basic, fr, frIndexes;
@@ -127,14 +132,15 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
         calculatedResult += number;
       }
       _result = calculatedResult.toString();
-      _enteredAnswer = "";
+      _enteredAnswers = "";
     });
   }
 
   void checkAnswer() {
-    if (_enteredAnswer != _result) {
-      _wrongCount++;
-      _wrongAnswers.add(List.from(_questionList));
+    if (_enteredAnswers != _result) {
+      _wrongAnswer.add(_enteredAnswers);
+      _correctAnswer.add(_result);
+      _wrongAnswersQuestions.add(List.from(_questionList));
     }
     generateQuestion();
     setState(() {
@@ -160,7 +166,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
     final screenSize = min(
         MediaQuery.of(context).size.width, MediaQuery.of(context).size.height);
     final isRotate =
-        MediaQuery.of(context).size.width > MediaQuery.of(context).size.height-50;
+        MediaQuery.of(context).size.width > MediaQuery.of(context).size.height;
 
     if (_timeRemaining != 0) {
       _controller.forward();
@@ -172,7 +178,8 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text("UC Math"),
+          title: Center(child: const Text("UC Math")),
+          backgroundColor: _testColor,
         ),
         body: Padding(
           padding: EdgeInsets.all(screenSize * .04),
@@ -236,7 +243,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
                 child: Container(
                   height: screenSize * 0.01,
                   child: LinearProgressIndicator(
@@ -254,15 +261,15 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
                 //   columnGap: 20,
                 //   children: _buildTestUI(screenSize,isRotate),
                 // ),
-                  child:
-                  // MediaQuery.of(context).size.height<200?
-                  // SingleChildScrollView(
-                  //     child: Column(children:_buildTestUI(screenSize,isRotate))
-                  // )
-                  //     :
-                  isRotate?
-                    Row(children: _buildTestUI(screenSize,isRotate)):
-                    Column(children:  _buildTestUI(screenSize,isRotate)),
+                child:
+                // MediaQuery.of(context).size.height<200?
+                // SingleChildScrollView(
+                //     child: Column(children:_buildTestUI(screenSize,isRotate))
+                // )
+                //     :
+                isRotate?
+                Row(children: _buildTestUI(screenSize,isRotate)):
+                Column(children:  _buildTestUI(screenSize,isRotate)),
               ),
             ],
           ),
@@ -289,6 +296,8 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
                   children: [
                     Flexible(
                       child: Container(
+                        height: screenSize * 0.33,
+                        width: screenSize * 0.11,
                         decoration: BoxDecoration(
                           border: Border.all(color: _testColor, width: 2),
                           borderRadius: BorderRadius.circular(8),
@@ -300,9 +309,11 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 ..._questionList.map((number) => Text(
-                                      '$number',
-                                      style: TextStyle(fontSize: screenSize * 0.04),
-                                    )),
+                                  '$number',
+                                  style: TextStyle(
+                                      fontSize: screenSize * 0.04,
+                                      fontWeight: FontWeight.bold),
+                                )),
                                 const Flexible(child: SizedBox()),
                                 Flexible(
                                   child: Container(
@@ -314,7 +325,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
                                     ),
                                     child: Center(
                                       child: Text(
-                                        _enteredAnswer,
+                                        _enteredAnswers,
                                         style: TextStyle(
                                             fontSize: screenSize * 0.04,
                                             fontWeight: FontWeight.bold),
@@ -363,7 +374,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
       child: ElevatedButton(
         onPressed: () {
           setState(() {
-            _enteredAnswer = number.toString();
+            _enteredAnswers = number.toString();
             _submitEnabled = true;
           });
         },
@@ -402,6 +413,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
     );
   }
 }
+
 
 class TimerFillPainter extends CustomPainter {
   final double radius;

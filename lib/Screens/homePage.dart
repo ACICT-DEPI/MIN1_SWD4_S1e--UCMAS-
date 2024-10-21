@@ -275,7 +275,7 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                               );
                             },
                             child: const Text(
-                              'المستوى الاول I',
+                              'المستوى الاول (1)',
                               textDirection: TextDirection.rtl,
                               textAlign: TextAlign.start,
                             ),
@@ -293,7 +293,7 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                               );
                             },
                             child: const Text(
-                              'المستوى الاول II',
+                              'المستوى الاول (2)',
                               textDirection: TextDirection.rtl,
                               textAlign: TextAlign.start,
                             ),
@@ -311,7 +311,7 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                               );
                             },
                             child: const Text(
-                              'المستوى الاول III',
+                              'المستوى الاول شامل',
                               textDirection: TextDirection.rtl,
                               textAlign: TextAlign.start,
                             ),
