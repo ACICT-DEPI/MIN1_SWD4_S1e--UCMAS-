@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uc_mas_app/Screens/friends_page.dart';
 import 'package:uc_mas_app/Screens/homePage.dart';
 import 'package:uc_mas_app/Screens/login.dart';
 import 'package:uc_mas_app/Screens/profile.dart';
@@ -64,6 +65,7 @@ class UCMASApp extends StatelessWidget {
           //'/level2-test':
           //'/mixed-test':
           //'/test-result':
+          '/friends':(context)=>  FrindsPage(),
         },
       ),
     );
