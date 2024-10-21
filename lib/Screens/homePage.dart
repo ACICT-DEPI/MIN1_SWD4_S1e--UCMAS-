@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uc_mas_app/Screens/login.dart';
 import 'package:uc_mas_app/Screens/test_page.dart';
+import 'package:uc_mas_app/Screens/userProfile';
 import 'package:uc_mas_app/components/showSnackbar.dart';
 import 'package:uc_mas_app/components/test_types.dart';
 
@@ -118,27 +119,43 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                       },
                       child: const CircleAvatar(
                         radius: 25,
-                        backgroundImage: AssetImage(
-                            'images/user.png'), // Your profile image here
+                        backgroundImage: AssetImage('images/user.png'),
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Text(
-                      'أهلا $_user', // Dynamic username from Firestore
-                    ),
+                    Text('أهلا $_user'), // Dynamic username from Firestore
                   ],
                 ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.logout,
-                    color: Color(0xFF3F4C5C),
-                  ),
-                  onPressed: () async {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (c) => const Login()));
-                  },
-                ),
+                Row(
+                  children: [
+                    InkWell(
+                      child: Container(
+                        width: 50.0,
+                        height: 50.0,
+                        child: Image.asset(
+                          'images/counter.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/virtual-abacus');
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.logout,
+                        color: Color(0xFF3F4C5C),
+                      ),
+                      onPressed: () async {
+                        await FirebaseAuth.instance.signOut();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (c) => const Login()),
+                        );
+                      },
+                    ),
+                  ],
+                )
               ],
             ),
           ),
@@ -156,55 +173,27 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
                   controller: _searchController,
-                  textAlign: TextAlign.right, // Align text to the right
+                  textAlign: TextAlign.right,
                   onChanged: (value) {
-                    _searchUsers(value); // Trigger search on text change
+                    _searchUsers(value);
                   },
                   decoration: const InputDecoration(
                     hintText: 'البحث',
                     hintTextDirection: TextDirection.rtl,
-                    // Text direction RTL
                     prefixIcon: Icon(Icons.search, color: Colors.grey),
                     prefixIconConstraints:
                         BoxConstraints(minWidth: 0, minHeight: 0),
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    // Add padding to balance
                     border: InputBorder.none,
                   ),
                 ),
               ),
             ),
           ),
-          // Search Results List
-          Positioned(
-            top: 180,
-            left: 20,
-            right: 20,
-            child: _searchResults.isNotEmpty
-                ? Container(
-                    color: Colors.white.withOpacity(0.9),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _searchResults.length,
-                      itemBuilder: (context, index) {
-                        var user = _searchResults[index].data()
-                            as Map<String, dynamic>;
-                        return ListTile(
-                          title: Text(user['name']),
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                AssetImage('images/user.png'), // Default avatar
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                : Container(), // Empty container if no results
-          ),
           // Floating Card with Top 5 Users
           Positioned(
-            top: 300,
+            top: 200,
             left: 20,
             right: 20,
             child: Column(
@@ -221,32 +210,41 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                       children: [
                         const Row(
                           children: [
-                            Text(
-                              'أفضل 5 مستخدمين',
-                              textAlign: TextAlign.right,
-                            ),
+                            Text('أفضل 5 مستخدمين', textAlign: TextAlign.right),
                           ],
                         ),
                         const SizedBox(height: 10),
-                        // Reverse the order of the user avatars
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: List.generate(5, (index) {
-                            return Column(
-                              children: [
-                                CircleAvatar(
-                                  radius: 25,
-                                  backgroundImage: AssetImage(
-                                      'images/user${index + 1}.png'), // Reverse order of user images
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  'المستخدم${index + 1}',
-                                ),
-                              ],
-                            );
-                          }),
-                        ),
+                        OverflowBar(
+                          alignment: MainAxisAlignment.center,
+                          overflowSpacing: 20.0,
+                          spacing: 30.0,
+                          children: [
+                            Wrap(
+                              alignment: WrapAlignment.center,
+                              spacing: 30.0,
+                              runSpacing: 20.0,
+                              children: List.generate(5, (index) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 25,
+                                      backgroundImage: AssetImage(
+                                        'images/user${index + 1}.png',
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'المستخدم ${index + 1}',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(fontSize: 14),
+                                    ),
+                                  ],
+                                );
+                              }),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -257,75 +255,70 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                 ElevatedButton(
                   onPressed: () {
                     showDialog(
-                        context: context,
-                        builder: (dialogContext) => AlertDialog(
-                              title: const Text(
-                                'اختر نوع الاختبار',
-                                textDirection: TextDirection.rtl,
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(dialogContext);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const TestPage(
-                                                testType: TestType.level1_1,
-                                              )),
-                                    );
-                                  },
-                                  style: const ButtonStyle(
-                                    alignment: Alignment.centerRight,
-                                  ),
-                                  child: const Text(
-                                    'المستوى الاول I',
-                                    textDirection: TextDirection.rtl,
-                                    textAlign: TextAlign.start,
+                      context: context,
+                      builder: (dialogContext) => AlertDialog(
+                        title: const Text(
+                          'اختر نوع الاختبار',
+                          textDirection: TextDirection.rtl,
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(dialogContext);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const TestPage(
+                                    testType: TestType.level1_1,
                                   ),
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(dialogContext);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const TestPage(
-                                                testType: TestType.level1_2,
-                                              )),
-                                    );
-                                  },
-                                  style: const ButtonStyle(
-                                    alignment: Alignment.centerRight,
-                                  ),
-                                  child: const Text(
-                                    'المستوى الاول II',
-                                    textDirection: TextDirection.rtl,
-                                    textAlign: TextAlign.start,
+                              );
+                            },
+                            child: const Text(
+                              'المستوى الاول I',
+                              textDirection: TextDirection.rtl,
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(dialogContext);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const TestPage(
+                                    testType: TestType.level1_2,
                                   ),
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(dialogContext);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const TestPage(
-                                                testType: TestType.level1,
-                                              )),
-                                    );
-                                  },
-                                  style: const ButtonStyle(
-                                    alignment: Alignment.centerRight,
-                                  ),
-                                  child: const Text(
-                                    'المستوى الاول III',
-                                    textDirection: TextDirection.rtl,
-                                    textAlign: TextAlign.start,
+                              );
+                            },
+                            child: const Text(
+                              'المستوى الاول II',
+                              textDirection: TextDirection.rtl,
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(dialogContext);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const TestPage(
+                                    testType: TestType.level1,
                                   ),
                                 ),
-                              ],
-                            ));
+                              );
+                            },
+                            child: const Text(
+                              'المستوى الاول III',
+                              textDirection: TextDirection.rtl,
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
                   },
                   child: const Text('ابدأ الاختبار'),
                 ),
@@ -333,6 +326,38 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
               ],
             ),
           ),
+          // Search Results List (Should appear above other widgets)
+          if (_searchResults.isNotEmpty)
+            Positioned(
+              top: 180,
+              left: 20,
+              right: 20,
+              child: Container(
+                color: Colors.white.withOpacity(0.9),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _searchResults.length,
+                  itemBuilder: (context, index) {
+                    var user =
+                        _searchResults[index].data() as Map<String, dynamic>;
+                    return ListTile(
+                      title: GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return UsersProfile(email: user['email']);
+                          }));
+                        },
+                        child: Text(user['name']),
+                      ),
+                      leading: const CircleAvatar(
+                        backgroundImage: AssetImage('images/user.png'),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
         ],
       ),
     );

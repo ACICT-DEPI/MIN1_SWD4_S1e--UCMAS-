@@ -1,59 +1,35 @@
-// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, avoid_print
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, avoid_print, must_be_immutable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uc_mas_app/Screens/login.dart';
 
-class Profile extends StatefulWidget {
+class UsersProfile extends StatefulWidget {
   static const String id = 'profile';
-
-  const Profile({super.key});
+  String email;
+  UsersProfile({super.key, required this.email});
 
   @override
-  _ProfileState createState() => _ProfileState();
+  _UsersProfileState createState() => _UsersProfileState();
 }
 
-class _ProfileState extends State<Profile> {
-  User? user;
+class _UsersProfileState extends State<UsersProfile> {
   Map<String, dynamic>? userData;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    getCurrentUser();
-  }
-
-  void getCurrentUser() async {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-
-    if (currentUser != null) {
-      setState(() {
-        user = currentUser;
-      });
-      await fetchUserDataByEmail();
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('User is not logged in'),
-        ),
-      );
-    }
+    fetchUserDataByEmail();
   }
 
   Future<void> fetchUserDataByEmail() async {
     try {
       // Log the user's email
-      print('Fetching data for email: ${user!.email}');
+      print('Fetching data for email: ${widget.email}');
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('users')
-          .where('email', isEqualTo: user!.email)
+          .where('email', isEqualTo: widget.email)
           .limit(1)
           .get();
 
@@ -67,7 +43,7 @@ class _ProfileState extends State<Profile> {
         });
       } else {
         // Log if document is not found
-        print('No user data found for email: ${user!.email}');
+        print('No user data found for email: ${widget.email}');
 
         setState(() {
           isLoading = false;
@@ -100,9 +76,7 @@ class _ProfileState extends State<Profile> {
         textDirection: TextDirection.rtl,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('حسابي'),
             actions: [
-              
               Transform(
                 alignment: Alignment.center,
                 transform: Matrix4.rotationY(3.14),
@@ -118,10 +92,8 @@ class _ProfileState extends State<Profile> {
                       color: Colors.black,
                     ),
                   ),
-                  
                 ),
-              ),
-              
+              )
             ],
           ),
           body: isLoading
@@ -154,13 +126,8 @@ class _ProfileState extends State<Profile> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  
                                 ],
                               ),
-                              Spacer(),
-                              IconButton(onPressed: (){
-                                Navigator.pushNamed(context, '/friends');
-                              }, icon: Icon(Icons.people))
                             ],
                           ),
                         ),
@@ -171,25 +138,9 @@ class _ProfileState extends State<Profile> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'البريد الالكتروني: ${userData!['email'] ?? 'No Email'}',
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                  Spacer(),
-                                  IconButton(
-                      icon: const Icon(
-                        Icons.logout,
-                        color: Color(0xFF3F4C5C),
-                      ),
-                      onPressed: () async {
-                        await FirebaseAuth.instance.signOut();
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (c) => const Login()));
-                      },
-                    ),
-                                ],
+                              Text(
+                                'البريد الالكتروني: ${userData!['email'] ?? 'No Email'}',
+                                style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 10),
                               Text(
@@ -220,7 +171,6 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         const Divider(),
-                        
                       ],
                     ),
         ),
