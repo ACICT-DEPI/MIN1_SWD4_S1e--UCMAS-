@@ -2,8 +2,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:uc_mas_app/Screens/login.dart';
+import 'UserActivityGraph.dart'; // Import your graph widget
 
 class Profile extends StatefulWidget {
   static const String id = 'profile';
@@ -18,6 +20,10 @@ class _ProfileState extends State<Profile> {
   User? user;
   Map<String, dynamic>? userData;
   bool isLoading = true;
+
+  // Variables to hold correct and wrong answer data
+  List<FlSpot> correctAnswers = [];
+  List<FlSpot> wrongAnswers = [];
 
   @override
   void initState() {
@@ -48,7 +54,6 @@ class _ProfileState extends State<Profile> {
 
   Future<void> fetchUserDataByEmail() async {
     try {
-      // Log the user's email
       print('Fetching data for email: ${user!.email}');
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -58,17 +63,16 @@ class _ProfileState extends State<Profile> {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // Log the retrieved document data
         print('User data found: ${querySnapshot.docs.first.data()}');
 
         setState(() {
           userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+          correctAnswers = fetchAnswerData(userData!['correctRatio']);
+          wrongAnswers = fetchAnswerData(userData!['wrongRatio']);
           isLoading = false;
         });
       } else {
-        // Log if document is not found
         print('No user data found for email: ${user!.email}');
-
         setState(() {
           isLoading = false;
         });
@@ -92,6 +96,13 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+  // Function to convert the fetched data into FlSpot list
+  List<FlSpot> fetchAnswerData(List<dynamic> answerData) {
+    return List<FlSpot>.generate(answerData.length, (index) {
+      return FlSpot(index.toDouble(), answerData[index].toDouble());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -102,7 +113,6 @@ class _ProfileState extends State<Profile> {
           appBar: AppBar(
             title: const Text('حسابي'),
             actions: [
-              
               Transform(
                 alignment: Alignment.center,
                 transform: Matrix4.rotationY(3.14),
@@ -118,10 +128,8 @@ class _ProfileState extends State<Profile> {
                       color: Colors.black,
                     ),
                   ),
-                  
                 ),
               ),
-              
             ],
           ),
           body: isLoading
@@ -154,13 +162,15 @@ class _ProfileState extends State<Profile> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  
                                 ],
                               ),
                               Spacer(),
-                              IconButton(onPressed: (){
-                                Navigator.pushNamed(context, '/friends');
-                              }, icon: Icon(Icons.people))
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/friends');
+                                },
+                                icon: const Icon(Icons.people),
+                              ),
                             ],
                           ),
                         ),
@@ -177,18 +187,20 @@ class _ProfileState extends State<Profile> {
                                     'البريد الالكتروني: ${userData!['email'] ?? 'No Email'}',
                                     style: const TextStyle(fontSize: 16),
                                   ),
-                                  Spacer(),
+                                  const Spacer(),
                                   IconButton(
-                      icon: const Icon(
-                        Icons.logout,
-                        color: Color(0xFF3F4C5C),
-                      ),
-                      onPressed: () async {
-                        await FirebaseAuth.instance.signOut();
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (c) => const Login()));
-                      },
-                    ),
+                                    icon: const Icon(
+                                      Icons.logout,
+                                      color: Color(0xFF3F4C5C),
+                                    ),
+                                    onPressed: () async {
+                                      await FirebaseAuth.instance.signOut();
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (c) => const Login()));
+                                    },
+                                  ),
                                 ],
                               ),
                               const SizedBox(height: 10),
@@ -205,7 +217,6 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         const Divider(),
-                        // Activity/Stats
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Column(
@@ -220,7 +231,17 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         const Divider(),
-                        
+                        // User Activity Graph
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Container(
+                            height: 300, // Adjust height as needed
+                            child: UserActivityGraph(
+                              correctAnswersData: correctAnswers,
+                              wrongAnswersData: wrongAnswers,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
         ),

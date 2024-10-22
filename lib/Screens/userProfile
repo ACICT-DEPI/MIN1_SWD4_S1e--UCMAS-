@@ -2,10 +2,13 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart'; // Ensure you have this import
+import 'UserActivityGraph.dart'; // Make sure this import is correct
 
 class UsersProfile extends StatefulWidget {
   static const String id = 'profile';
-  String email;
+  final String email;
+  
   UsersProfile({super.key, required this.email});
 
   @override
@@ -16,6 +19,10 @@ class _UsersProfileState extends State<UsersProfile> {
   Map<String, dynamic>? userData;
   bool isLoading = true;
 
+  // Variables to hold correct and wrong answer data
+  List<FlSpot> correctAnswers = [];
+  List<FlSpot> wrongAnswers = [];
+
   @override
   void initState() {
     super.initState();
@@ -24,7 +31,6 @@ class _UsersProfileState extends State<UsersProfile> {
 
   Future<void> fetchUserDataByEmail() async {
     try {
-      // Log the user's email
       print('Fetching data for email: ${widget.email}');
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -34,17 +40,18 @@ class _UsersProfileState extends State<UsersProfile> {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // Log the retrieved document data
         print('User data found: ${querySnapshot.docs.first.data()}');
 
         setState(() {
           userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
           isLoading = false;
+
+          // Fetching correctRatio and wrongRatio data
+          correctAnswers = fetchAnswerData(userData!['correctRatio']);
+          wrongAnswers = fetchAnswerData(userData!['wrongRatio']);
         });
       } else {
-        // Log if document is not found
         print('No user data found for email: ${widget.email}');
-
         setState(() {
           isLoading = false;
         });
@@ -56,7 +63,6 @@ class _UsersProfileState extends State<UsersProfile> {
       }
     } catch (e) {
       print('Error fetching user data: $e');
-
       setState(() {
         isLoading = false;
       });
@@ -66,6 +72,13 @@ class _UsersProfileState extends State<UsersProfile> {
         ),
       );
     }
+  }
+
+  // Function to convert the fetched data into FlSpot list
+  List<FlSpot> fetchAnswerData(List<dynamic> answerData) {
+    return List<FlSpot>.generate(answerData.length, (index) {
+      return FlSpot(index.toDouble(), answerData[index].toDouble());
+    });
   }
 
   @override
@@ -155,22 +168,21 @@ class _UsersProfileState extends State<UsersProfile> {
                             ],
                           ),
                         ),
+                      
+                        
+                        
                         const Divider(),
-                        // Activity/Stats
+                        // User Activity Graph
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'أعلى تقييم: ${userData!['highScore'] ?? 0}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 10),
-                            ],
+                          child: Container(
+                            height: 300, 
+                            child: UserActivityGraph(
+                              correctAnswersData: correctAnswers,
+                              wrongAnswersData: wrongAnswers,
+                            ),
                           ),
                         ),
-                        const Divider(),
                       ],
                     ),
         ),
