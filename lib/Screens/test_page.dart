@@ -15,8 +15,8 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
-  //int _timeRemaining = 4; // for test
-  int _timeRemaining = 480; // 10 minutes in seconds
+  int _timeRemaining = 20; // for test
+  //int _timeRemaining = 480; // 8 minutes in seconds
   int _questionIndex = 0;
   List _wrongAnswer = [];
   List _correctAnswer = [];
@@ -37,7 +37,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
     _testColor =
         Color(0xFF000000 + random.nextInt(0x00FFFFFF)).withOpacity(0.8);
     _controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 20));
+        AnimationController(vsync: this, duration: const Duration(minutes: 8));
     _animation = Tween(begin: 0.0, end: 2 * pi)
         .animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
     startTest();
@@ -112,7 +112,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
       if (isBasic) {
         currentNum = basic[random.nextInt(basic.length)];
       } else {
-        if (frIndexes.contains(testSize)) {
+        if (fr.isNotEmpty && (frIndexes.contains(testSize) || sum == 0 || sum == 9)) {
           currentNum = fr[random.nextInt(fr.length)];
         } else {
           currentNum = basic[random.nextInt(basic.length)];
@@ -254,22 +254,22 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
                 ),
               ),
               Expanded(
-                // child: LayoutGrid(
-                //   columnSizes: isRotate ? [auto, auto] : [auto],
-                //   rowSizes: isRotate ? [auto] : [auto, auto],
-                //   rowGap: 10,
-                //   columnGap: 20,
-                //   children: _buildTestUI(screenSize,isRotate),
-                // ),
-                child:
-                // MediaQuery.of(context).size.height<200?
-                // SingleChildScrollView(
-                //     child: Column(children:_buildTestUI(screenSize,isRotate))
-                // )
-                //     :
-                isRotate?
-                Row(children: _buildTestUI(screenSize,isRotate)):
-                Column(children:  _buildTestUI(screenSize,isRotate)),
+                child: LayoutGrid(
+                  columnSizes: isRotate ? [auto, auto] : [auto],
+                  rowSizes: isRotate ? [auto] : [auto, auto],
+                  rowGap: 10,
+                  columnGap: 20,
+                  children: _buildTestUI(screenSize,isRotate),
+                ),
+                // child:
+                // // MediaQuery.of(context).size.height<200?
+                // // SingleChildScrollView(
+                // //     child: Column(children:_buildTestUI(screenSize,isRotate))
+                // // )
+                // //     :
+                // isRotate?
+                // Row(children: _buildTestUI(screenSize,isRotate)):
+                // Column(children:  _buildTestUI(screenSize,isRotate)),
               ),
             ],
           ),
@@ -280,133 +280,112 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
 
   List<Widget> _buildTestUI(double screenSize,bool isRotate) {
     return [
-      Expanded(
-        flex: 10,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 2),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: IntrinsicWidth(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: Container(
-                        height: screenSize * 0.33,
-                        width: screenSize * 0.11,
+      Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black, width: 2),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: IntrinsicWidth(
+              child: Container(
+                constraints: BoxConstraints(maxHeight: screenSize*0.4, maxWidth: screenSize*0.2),
+                decoration: BoxDecoration(
+                  border:
+                  Border.all(color: _testColor, width: 2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(screenSize * .02),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ..._questionList.map((number) =>
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                              child: Text('$number', style: TextStyle(fontSize: screenSize*0.05),))
+                      ),
+                      Container(
+                        width: screenSize*0.08,
+                        height: screenSize*0.06,
                         decoration: BoxDecoration(
-                          border: Border.all(color: _testColor, width: 2),
+                          color: _testColor,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Padding(
-                          padding: EdgeInsets.all(screenSize * .02),
-                          child: Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ..._questionList.map((number) => Text(
-                                  '$number',
-                                  style: TextStyle(
-                                      fontSize: screenSize * 0.04,
-                                      fontWeight: FontWeight.bold),
-                                )),
-                                const Flexible(child: SizedBox()),
-                                Flexible(
-                                  child: Container(
-                                    height: screenSize * 0.08,
-                                    width: screenSize * 0.11,
-                                    decoration: BoxDecoration(
-                                      color: _testColor,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        _enteredAnswers,
-                                        style: TextStyle(
-                                            fontSize: screenSize * 0.04,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                        child: Center(
+                          child: Text(
+                            _enteredAnswers,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
       ),
-      const Expanded(flex:1,child: SizedBox()),
-      Expanded(
-        flex: 10,
-        child: LayoutGrid(
-          columnSizes: [1.5.fr, 1.5.fr, 1.5.fr],
-          rowSizes: const [auto, auto, auto, auto],
-          rowGap: 1,
-          columnGap: 10,
-          children: [
-            ...List.generate(9, (index) {
-              return _buildNumberButton(index + 1, screenSize - (isRotate?100:250));
-            }),
-            const SizedBox(),
-            _buildNumberButton(0, screenSize - (isRotate?100:250)),
-            _buildConfirmButton(screenSize - (isRotate?100:250)),
-          ],
-        ),
+      LayoutGrid(
+        columnSizes: [1.fr, 1.fr, 1.fr],
+        rowSizes: const [auto, auto, auto, auto],
+        rowGap: 8,
+        columnGap: 8,
+        children: [
+          ...List.generate(9, (index) {
+            return _buildNumberButton(index + 1, screenSize - (isRotate?100:250));
+          }),
+          const SizedBox(),
+          _buildNumberButton(0, screenSize - (isRotate?100:250)),
+          _buildConfirmButton(screenSize - (isRotate?100:250)),
+        ],
       ),
     ];
   }
 
   Widget _buildNumberButton(int number, double screenSize) {
-    return SizedBox(
-      width: screenSize * 1.09,
-      height: screenSize * .18,
-      child: ElevatedButton(
-        onPressed: () {
-          setState(() {
-            _enteredAnswers = number.toString();
-            _submitEnabled = true;
-          });
-        },
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+    return ElevatedButton(
+      onPressed: () {
+        setState(() {
+          _enteredAnswers = number.toString();
+          _submitEnabled = true;
+        });
+      },
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size(double.infinity, double.infinity),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
+      ),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
         child: Text(
           number.toString(),
-          style: TextStyle(color: _testColor, fontSize: screenSize * 0.06),
+          style: TextStyle(color: _testColor),
         ),
       ),
     );
   }
 
   Widget _buildConfirmButton(double screenSize) {
-    return SizedBox(
-      width: screenSize * 1.09,
-      height: screenSize * .18,
-      child: ElevatedButton(
-        onPressed: _submitEnabled ? checkAnswer : null,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: _submitEnabled ? _testColor : null,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+    return ElevatedButton(
+      onPressed: _submitEnabled ? checkAnswer : null,
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size(double.infinity, double.infinity),
+        backgroundColor: _submitEnabled ? _testColor : null,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
+      ),
 
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
         child: Icon(
             Icons.check,
-            size: screenSize * .08,
             color: _submitEnabled ? Colors.white : _testColor
         ),
       ),
