@@ -30,12 +30,23 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
   late Color _testColor;
   final random = Random();
   final List<int> _numbers = List.generate(18, (i) => i - ((i < 9) ? 9 : 8));
-
+  final List<Color> _testColors = [
+    Color(0xFFFFBF3E),  // "#ffbf3e"
+    Color(0xFFF6897F),  // "#f6897f"
+    Color(0xFF98DDEF),  // "#98ddef"
+    Color(0xFFEBB7C4),  // "#ebb7c4"
+    Color(0xFF137E86),  // "#137e86"
+    Color(0xFF60C5A8),  // "#60c5a8"
+    Color(0xFFD54873),  // "#d54873"
+    Color(0xFFE27AA5),  // "#e27aa5"
+    Color(0xFFE97B11),  // "#e97b11"
+    Color(0xFFFFBF3E),  // "#ffbf3e"
+  ];
   @override
   void initState() {
     super.initState();
     _testColor =
-        Color(0xFF000000 + random.nextInt(0x00FFFFFF)).withOpacity(0.8);
+        (_testColors.toList()..shuffle(random)).first.withOpacity(0.8);
     _controller =
         AnimationController(vsync: this, duration: const Duration(minutes: 8));
     _animation = Tween(begin: 0.0, end: 2 * pi)
@@ -178,7 +189,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Center(child: const Text("UC Math")),
+          title: const Center(child: Text("UC MAS")),
           backgroundColor: _testColor,
         ),
         body: Padding(
@@ -316,8 +327,8 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
                         child: Center(
                           child: Text(
                             _enteredAnswers,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold
+                            style: TextStyle(
+                                fontSize: screenSize*0.05,
                             ),
                           ),
                         ),
@@ -365,7 +376,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
         fit: BoxFit.scaleDown,
         child: Text(
           number.toString(),
-          style: TextStyle(color: _testColor),
+          style: TextStyle(color: _testColor,fontSize: screenSize*0.05),
         ),
       ),
     );
@@ -385,6 +396,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Icon(
+          size: screenSize*0.05,
             Icons.check,
             color: _submitEnabled ? Colors.white : _testColor
         ),

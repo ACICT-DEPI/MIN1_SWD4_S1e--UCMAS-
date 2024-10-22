@@ -170,110 +170,124 @@ class _ResultPageState extends State<ResultPage> {
                         ),
                         const SizedBox(height: 30),
 
-                        Text(
-                          widget.wrongAnswers.isNotEmpty
-                              ? 'الاجابات الخاطئة'
-                              : 'لا يوجد اجابات خاطئة!',
-                          style: const TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 20),
-                        if (widget.wrongAnswers.isNotEmpty) ...[
-                          Container(
-                            padding: const EdgeInsets.all(16),
+                             Container(
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: widget.resultColor, width: 2),
+                              border: Border.all(color: widget.resultColor, width: 2),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: widget
-                                  .wrongAnswersQuestion[_currentIndex]
-                                  .map((num) {
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Text(
-                                    num.toString(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    widget.wrongAnswers.isNotEmpty
+                                        ? 'الاجابات الخاطئة'
+                                        : 'لا يوجد اجابات خاطئة!',
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
+                                        fontSize: 22, fontWeight: FontWeight.bold),
                                   ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                                                        const SizedBox(height: 20),
+                                                        if (widget.wrongAnswers.isNotEmpty) ...[
                               Container(
+                                padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
-                                  color: Colors.lightGreen,
+                                  border: Border.all(
+                                      color: widget.resultColor, width: 2),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      widget.correctAnswers[_currentIndex],
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: widget
+                                      .wrongAnswersQuestion[_currentIndex]
+                                      .map((num) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.symmetric(vertical: 8.0),
+                                      child: Text(
+                                        num.toString(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    );
+                                  }).toList(),
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      widget.wrongAnswers[_currentIndex],
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.lightGreen,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          widget.correctAnswers[_currentIndex],
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 10),
+                                  const SizedBox(width: 10),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          widget.wrongAnswers[_currentIndex],
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(height: 10),
 
-                          // Navigation Buttons for wrong answers
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              // Next Arrow Button
-                              IconButton(
-                                onPressed: _nextQuestion,
-                                icon: const Icon(
-                                  Icons
-                                      .arrow_back, // Right arrow icon for "Next"
-                                  size: 30,
-                                ),
-                                color: Colors.blueAccent,
+                              // Navigation Buttons for wrong answers
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  // Next Arrow Button
+                                  IconButton(
+                                    onPressed: _nextQuestion,
+                                    icon: const Icon(
+                                      Icons
+                                          .arrow_back, // Right arrow icon for "Next"
+                                      size: 30,
+                                    ),
+                                    color: Colors.blueAccent,
+                                  ),
+                                  Text(
+                                      "${widget.wrongAnswers.length} /${_currentIndex + 1}",
+                                      style: TextStyle(color: Colors.grey)),
+                                  // Previous Arrow Button
+                                  IconButton(
+                                    onPressed: _previousQuestion,
+                                    icon: const Icon(
+                                      Icons.arrow_forward,
+                                      // Left arrow icon for "Previous"
+                                      size: 30,
+                                    ),
+                                    color: Colors.blueAccent,
+                                  ),
+                                ],
+                              )
+                                                        ]
+                                ],
                               ),
-                              Text(
-                                  "${widget.wrongAnswers.length} /${_currentIndex + 1}",
-                                  style: TextStyle(color: Colors.grey)),
-                              // Previous Arrow Button
-                              IconButton(
-                                onPressed: _previousQuestion,
-                                icon: const Icon(
-                                  Icons.arrow_forward,
-                                  // Left arrow icon for "Previous"
-                                  size: 30,
-                                ),
-                                color: Colors.blueAccent,
-                              ),
-                            ],
-                          )
-                        ]
+                            ),
+
+                          ),
                       ],
                     ),
                   ),
@@ -291,6 +305,7 @@ class _ResultPageState extends State<ResultPage> {
         padding: const EdgeInsets.all(16),
         width: 165,
         decoration: BoxDecoration(
+          color: color,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -303,8 +318,8 @@ class _ResultPageState extends State<ResultPage> {
             const SizedBox(height: 10),
             Text(
               value,
-              style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.bold, color: color),
+              style: const TextStyle(
+                  fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ],
         ),
