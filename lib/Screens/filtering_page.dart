@@ -50,7 +50,7 @@ class _FilteringPageState extends State<FilteringPage> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
-          "مجتمع UM Math",
+          "مجتمع UC Math",
           style: TextStyle(color: Colors.white, fontSize: 30),
         ),
       ),
