@@ -9,9 +9,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.44"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
   archive:
     dependency: transitive
     description:
@@ -20,9 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.6.1"
->>>>>>> 798ea12 (all done)
-=======
->>>>>>> a214cdc (all done)
   async:
     dependency: transitive
     description:
@@ -98,9 +92,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.6"
->>>>>>> 798ea12 (all done)
-=======
->>>>>>> a214cdc (all done)
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -228,9 +219,7 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
+
   http:
     dependency: transitive
     description:
@@ -239,9 +228,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.2"
->>>>>>> 798ea12 (all done)
-=======
->>>>>>> a214cdc (all done)
+
   http_parser:
     dependency: transitive
     description:
@@ -250,9 +237,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
   intl:
     dependency: "direct main"
     description:
@@ -261,9 +245,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.17.0"
->>>>>>> 798ea12 (all done)
-=======
->>>>>>> a214cdc (all done)
+
   leak_tracker:
     dependency: transitive
     description:
@@ -296,9 +278,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
+
   lottie:
     dependency: "direct main"
     description:
@@ -307,9 +287,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.3"
->>>>>>> 798ea12 (all done)
-=======
->>>>>>> a214cdc (all done)
+
   matcher:
     dependency: transitive
     description:
