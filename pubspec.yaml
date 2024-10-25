@@ -1,7 +1,10 @@
 name: uc_mas_app
 description: "An application to aid in UC MAS training."
 
+<<<<<<< HEAD
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+=======
+>>>>>>> a214cdc (all done)
 
 version: 1.0.0+1
 
@@ -17,10 +20,13 @@ dependencies:
   modal_progress_hud_nsn:
   cloud_firestore:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   intl: 
   lottie:
 >>>>>>> 798ea12 (all done)
+=======
+>>>>>>> a214cdc (all done)
 
   cupertino_icons: ^1.0.8
   flutter_layout_grid: ^2.0.7
