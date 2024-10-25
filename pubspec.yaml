@@ -16,6 +16,11 @@ dependencies:
   firebase_auth:
   modal_progress_hud_nsn:
   cloud_firestore:
+<<<<<<< HEAD
+=======
+  intl: 
+  lottie:
+>>>>>>> 798ea12 (all done)
 
   cupertino_icons: ^1.0.8
   flutter_layout_grid: ^2.0.7

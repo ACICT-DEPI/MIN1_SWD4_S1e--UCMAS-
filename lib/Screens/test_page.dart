@@ -31,22 +31,21 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
   final random = Random();
   final List<int> _numbers = List.generate(18, (i) => i - ((i < 9) ? 9 : 8));
   final List<Color> _testColors = [
-    Color(0xFFFFBF3E),  // "#ffbf3e"
-    Color(0xFFF6897F),  // "#f6897f"
-    Color(0xFF98DDEF),  // "#98ddef"
-    Color(0xFFEBB7C4),  // "#ebb7c4"
-    Color(0xFF137E86),  // "#137e86"
-    Color(0xFF60C5A8),  // "#60c5a8"
-    Color(0xFFD54873),  // "#d54873"
-    Color(0xFFE27AA5),  // "#e27aa5"
-    Color(0xFFE97B11),  // "#e97b11"
-    Color(0xFFFFBF3E),  // "#ffbf3e"
+    const Color(0xFFFFBF3E), // "#ffbf3e"
+    const Color(0xFFF6897F), // "#f6897f"
+    const Color(0xFF98DDEF), // "#98ddef"
+    const Color(0xFFEBB7C4), // "#ebb7c4"
+    const Color(0xFF137E86), // "#137e86"
+    const Color(0xFF60C5A8), // "#60c5a8"
+    const Color(0xFFD54873), // "#d54873"
+    const Color(0xFFE27AA5), // "#e27aa5"
+    const Color(0xFFE97B11), // "#e97b11"
+    const Color(0xFFFFBF3E), // "#ffbf3e"
   ];
   @override
   void initState() {
     super.initState();
-    _testColor =
-        (_testColors.toList()..shuffle(random)).first.withOpacity(0.8);
+    _testColor = (_testColors.toList()..shuffle(random)).first.withOpacity(0.8);
     _controller =
         AnimationController(vsync: this, duration: const Duration(minutes: 8));
     _animation = Tween(begin: 0.0, end: 2 * pi)
@@ -71,12 +70,11 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
           context,
           MaterialPageRoute(
             builder: (context) => ResultPage(
-                correctCount: _questionIndex - _wrongAnswer.length-1,
+                correctCount: _questionIndex - _wrongAnswer.length - 1,
                 wrongAnswers: _wrongAnswer,
                 correctAnswers: _correctAnswer,
                 wrongAnswersQuestion: _wrongAnswersQuestions,
                 resultColor: _testColor),
-
           ),
         );
       }
@@ -87,12 +85,12 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
     int testSize = (_questionIndex <= 30
         ? 3
         : _questionIndex <= 70
-        ? 4
-        : _questionIndex <= 120
-        ? 5
-        : _questionIndex <= 180
-        ? 6
-        : 7);
+            ? 4
+            : _questionIndex <= 120
+                ? 5
+                : _questionIndex <= 180
+                    ? 6
+                    : 7);
     int currentNum = _numbers[random.nextInt(8) + 9];
     int sum = currentNum;
     late List<int> basic, fr, frIndexes;
@@ -123,7 +121,8 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
       if (isBasic) {
         currentNum = basic[random.nextInt(basic.length)];
       } else {
-        if (fr.isNotEmpty && (frIndexes.contains(testSize) || sum == 0 || sum == 9)) {
+        if (fr.isNotEmpty &&
+            (frIndexes.contains(testSize) || sum == 0 || sum == 9)) {
           currentNum = fr[random.nextInt(fr.length)];
         } else {
           currentNum = basic[random.nextInt(basic.length)];
@@ -254,7 +253,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
+                    const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
                 child: Container(
                   height: screenSize * 0.01,
                   child: LinearProgressIndicator(
@@ -270,7 +269,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
                   rowSizes: isRotate ? [auto] : [auto, auto],
                   rowGap: 10,
                   columnGap: 20,
-                  children: _buildTestUI(screenSize,isRotate),
+                  children: _buildTestUI(screenSize, isRotate),
                 ),
                 // child:
                 // // MediaQuery.of(context).size.height<200?
@@ -289,7 +288,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
     );
   }
 
-  List<Widget> _buildTestUI(double screenSize,bool isRotate) {
+  List<Widget> _buildTestUI(double screenSize, bool isRotate) {
     return [
       Container(
         decoration: BoxDecoration(
@@ -301,10 +300,10 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
             padding: const EdgeInsets.all(10),
             child: IntrinsicWidth(
               child: Container(
-                constraints: BoxConstraints(maxHeight: screenSize*0.4, maxWidth: screenSize*0.2),
+                constraints: BoxConstraints(
+                    maxHeight: screenSize * 0.4, maxWidth: screenSize * 0.2),
                 decoration: BoxDecoration(
-                  border:
-                  Border.all(color: _testColor, width: 2),
+                  border: Border.all(color: _testColor, width: 2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Padding(
@@ -312,14 +311,15 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ..._questionList.map((number) =>
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                              child: Text('$number', style: TextStyle(fontSize: screenSize*0.05),))
-                      ),
+                      ..._questionList.map((number) => FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            '$number',
+                            style: TextStyle(fontSize: screenSize * 0.05),
+                          ))),
                       Container(
-                        width: screenSize*0.08,
-                        height: screenSize*0.06,
+                        width: screenSize * 0.08,
+                        height: screenSize * 0.06,
                         decoration: BoxDecoration(
                           color: _testColor,
                           borderRadius: BorderRadius.circular(8),
@@ -328,7 +328,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
                           child: Text(
                             _enteredAnswers,
                             style: TextStyle(
-                                fontSize: screenSize*0.05,
+                              fontSize: screenSize * 0.05,
                             ),
                           ),
                         ),
@@ -348,11 +348,12 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
         columnGap: 8,
         children: [
           ...List.generate(9, (index) {
-            return _buildNumberButton(index + 1, screenSize - (isRotate?100:250));
+            return _buildNumberButton(
+                index + 1, screenSize - (isRotate ? 100 : 250));
           }),
           const SizedBox(),
-          _buildNumberButton(0, screenSize - (isRotate?100:250)),
-          _buildConfirmButton(screenSize - (isRotate?100:250)),
+          _buildNumberButton(0, screenSize - (isRotate ? 100 : 250)),
+          _buildConfirmButton(screenSize - (isRotate ? 100 : 250)),
         ],
       ),
     ];
@@ -376,7 +377,7 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
         fit: BoxFit.scaleDown,
         child: Text(
           number.toString(),
-          style: TextStyle(color: _testColor,fontSize: screenSize*0.05),
+          style: TextStyle(color: _testColor, fontSize: screenSize * 0.05),
         ),
       ),
     );
@@ -392,19 +393,16 @@ class _TestState extends State<TestPage> with SingleTickerProviderStateMixin {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
-
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Icon(
-          size: screenSize*0.05,
+            size: screenSize * 0.05,
             Icons.check,
-            color: _submitEnabled ? Colors.white : _testColor
-        ),
+            color: _submitEnabled ? Colors.white : _testColor),
       ),
     );
   }
 }
-
 
 class TimerFillPainter extends CustomPainter {
   final double radius;
@@ -451,7 +449,7 @@ class TimerHandlePainter extends CustomPainter {
 
 extension QuestionType on TestType {
   bool get questionType {
-    switch(this) {
+    switch (this) {
       case TestType.level1:
         return Random().nextBool();
       case TestType.level1_1:

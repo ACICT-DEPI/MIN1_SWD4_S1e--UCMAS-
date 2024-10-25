@@ -2,6 +2,10 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+=======
+import 'package:lottie/lottie.dart';
+>>>>>>> 798ea12 (all done)
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uc_mas_app/Screens/homePage.dart';
@@ -41,6 +45,7 @@ class _LoginState extends State<Login> {
                     child: Column(
                       children: [
                         Text(
+<<<<<<< HEAD
                           'أهلا بك في',
                           style: TextStyle(
                             fontSize: 30,
@@ -49,6 +54,9 @@ class _LoginState extends State<Login> {
                         ),
                         Text(
                           'UC Math App',
+=======
+                          'UC MAS App',
+>>>>>>> 798ea12 (all done)
                           style: TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
@@ -58,6 +66,7 @@ class _LoginState extends State<Login> {
                       ],
                     ),
                   ),
+<<<<<<< HEAD
                   const Image(
                     image: NetworkImage(
                         'https://t4.ftcdn.net/jpg/04/56/73/31/360_F_456733197_IkANz9OFFyeqniYkm72Xss5UOwnCieMW.jpg'),
@@ -67,13 +76,42 @@ class _LoginState extends State<Login> {
                   Container(
                     width: (MediaQuery.of(context).size.width) >= 600
                         ? MediaQuery.of(context).size.width * 0.4
+=======
+                  Lottie.asset(
+                    'images/Animation.json',
+                    width: 500,
+                    height: 200,
+                  ),
+                  Container(
+                    width: (MediaQuery.of(context).size.width) >= 600
+                        ? MediaQuery.of(context).size.width * 0.6
+>>>>>>> 798ea12 (all done)
                         : MediaQuery.of(context).size.width * 0.9,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 50, vertical: 10),
                     decoration: const BoxDecoration(
+<<<<<<< HEAD
                       color: Color(0xFF3F4C5C),
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(40)),
+=======
+                      gradient: LinearGradient(
+                        colors: [
+                          //Color(0xFFF6897F),
+                          Color(0xFF98DDEF),
+                          //Color(0xFFFFBF3E),
+                          //Color(0xFF137E86),
+                          //Color(0xFF60C5A8),
+                          //Color(0xFFD54873),
+                          Color(0xFFE27AA5),
+                          //Color(0xFFE97B11),
+                        ], // Replace with your desired colors
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: const BorderRadius.vertical(
+                          top: const Radius.circular(40)),
+>>>>>>> 798ea12 (all done)
                     ),
                     child: Form(
                       key: formKey,

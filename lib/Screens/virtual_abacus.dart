@@ -18,7 +18,7 @@ class _VirtualAbacusState extends State<VirtualAbacus> {
   );
 
   final beadGradient =
-  const RadialGradient(center: Alignment(-0.4, -0.4), radius: 1, colors: [
+      const RadialGradient(center: Alignment(-0.4, -0.4), radius: 1, colors: [
     Colors.white,
     Color(0xFFC3C5FF),
     Color(0xFF9DA0EE),
@@ -58,91 +58,91 @@ class _VirtualAbacusState extends State<VirtualAbacus> {
           children: [
             Center(
                 child: CustomPaint(
-                  painter: _gradientPainter,
-                  child: SizedBox(
-                    width: beadWidth * 1.5,
-                    height: beadHeight * 7.65,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Padding(
-                          padding:
+              painter: _gradientPainter,
+              child: SizedBox(
+                width: beadWidth * 1.5,
+                height: beadHeight * 7.65,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Padding(
+                      padding:
                           EdgeInsets.symmetric(vertical: beadHeight * 0.05),
-                          child: Container(
-                            width: beadWidth * 0.1,
-                            decoration: BoxDecoration(
-                              gradient: frameGradient,
-                            ),
-                          ),
+                      child: Container(
+                        width: beadWidth * 0.1,
+                        decoration: BoxDecoration(
+                          gradient: frameGradient,
                         ),
-                        Positioned(
-                          top: beadHeight * 2.2,
-                          child: Container(
-                            width: beadWidth * 1.2,
-                            height: beadWidth * 0.1,
-                            decoration: BoxDecoration(
-                              gradient: frameGradient,
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                          ),
-                        ),
-                        AnimatedPositioned(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.decelerate,
-                          top: _isTopBeadUp ? beadHeight * .285 : beadHeight * 1.2,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _isTopBeadUp = !_isTopBeadUp;
-                                _value += (_isTopBeadUp ? -5 : 5);
-                              });
-                            },
-                            child: Bead(
-                              width: beadWidth,
-                              height: beadHeight,
-                              color: beadGradient,
-                            ),
-                          ),
-                        ),
-                        ...List.generate(4, (index) {
-                          return AnimatedPositioned(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.decelerate,
-                            bottom: beadHeight * (3 - index) +
-                                (_isBottomBeadsUp[index] ? beadHeight : 0) +
-                                beadWidth * .185,
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  if (_isBottomBeadsUp[index]) {
-                                    for (int i = index; i < 4; i++) {
-                                      if (_isBottomBeadsUp[i]) {
-                                        _isBottomBeadsUp[i] = false;
-                                        _value--;
-                                      }
-                                    }
-                                  } else {
-                                    for (int i = index; i >= 0; i--) {
-                                      if (!_isBottomBeadsUp[i]) {
-                                        _isBottomBeadsUp[i] = true;
-                                        _value++;
-                                      }
-                                    }
-                                  }
-                                });
-                              },
-                              child: Bead(
-                                width: beadWidth,
-                                height: beadHeight,
-                                color: beadGradient,
-                              ),
-                            ),
-                          );
-                        }),
-                      ],
+                      ),
                     ),
-                  ),
-                )),
+                    Positioned(
+                      top: beadHeight * 2.2,
+                      child: Container(
+                        width: beadWidth * 1.2,
+                        height: beadWidth * 0.1,
+                        decoration: BoxDecoration(
+                          gradient: frameGradient,
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                      ),
+                    ),
+                    AnimatedPositioned(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.decelerate,
+                      top: _isTopBeadUp ? beadHeight * .285 : beadHeight * 1.2,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isTopBeadUp = !_isTopBeadUp;
+                            _value += (_isTopBeadUp ? -5 : 5);
+                          });
+                        },
+                        child: Bead(
+                          width: beadWidth,
+                          height: beadHeight,
+                          color: beadGradient,
+                        ),
+                      ),
+                    ),
+                    ...List.generate(4, (index) {
+                      return AnimatedPositioned(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.decelerate,
+                        bottom: beadHeight * (3 - index) +
+                            (_isBottomBeadsUp[index] ? beadHeight : 0) +
+                            beadWidth * .185,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (_isBottomBeadsUp[index]) {
+                                for (int i = index; i < 4; i++) {
+                                  if (_isBottomBeadsUp[i]) {
+                                    _isBottomBeadsUp[i] = false;
+                                    _value--;
+                                  }
+                                }
+                              } else {
+                                for (int i = index; i >= 0; i--) {
+                                  if (!_isBottomBeadsUp[i]) {
+                                    _isBottomBeadsUp[i] = true;
+                                    _value++;
+                                  }
+                                }
+                              }
+                            });
+                          },
+                          child: Bead(
+                            width: beadWidth,
+                            height: beadHeight,
+                            color: beadGradient,
+                          ),
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+            )),
             Center(
               child: Container(
                 width: beadWidth * 1.5,
@@ -197,9 +197,9 @@ class Bead extends StatelessWidget {
 
   const Bead(
       {super.key,
-        required this.width,
-        required this.height,
-        required this.color});
+      required this.width,
+      required this.height,
+      required this.color});
 
   @override
   Widget build(BuildContext context) {

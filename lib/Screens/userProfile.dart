@@ -1,23 +1,20 @@
-// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, avoid_print
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, avoid_print, must_be_immutable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:uc_mas_app/Screens/login.dart';
-import 'UserActivityGraph.dart'; // Import your graph widget
+import 'package:fl_chart/fl_chart.dart'; // Ensure you have this import
 
-class Profile extends StatefulWidget {
+class UsersProfile extends StatefulWidget {
   static const String id = 'profile';
+  final String email;
 
-  const Profile({super.key});
+  UsersProfile({super.key, required this.email});
 
   @override
-  _ProfileState createState() => _ProfileState();
+  _UsersProfileState createState() => _UsersProfileState();
 }
 
-class _ProfileState extends State<Profile> {
-  User? user;
+class _UsersProfileState extends State<UsersProfile> {
   Map<String, dynamic>? userData;
   bool isLoading = true;
 
@@ -28,37 +25,16 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    getCurrentUser();
-  }
-
-  void getCurrentUser() async {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-
-    if (currentUser != null) {
-      setState(() {
-        user = currentUser;
-      });
-      await fetchUserDataByEmail();
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('User is not logged in'),
-        ),
-      );
-    }
+    fetchUserDataByEmail();
   }
 
   Future<void> fetchUserDataByEmail() async {
     try {
-      print('Fetching data for email: ${user!.email}');
+      print('Fetching data for email: ${widget.email}');
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('users')
-          .where('email', isEqualTo: user!.email)
+          .where('email', isEqualTo: widget.email)
           .limit(1)
           .get();
 
@@ -67,12 +43,14 @@ class _ProfileState extends State<Profile> {
 
         setState(() {
           userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+          isLoading = false;
+
+          // Fetching correctRatio and wrongRatio data
           correctAnswers = fetchAnswerData(userData!['correctRatio']);
           wrongAnswers = fetchAnswerData(userData!['wrongRatio']);
-          isLoading = false;
         });
       } else {
-        print('No user data found for email: ${user!.email}');
+        print('No user data found for email: ${widget.email}');
         setState(() {
           isLoading = false;
         });
@@ -84,7 +62,6 @@ class _ProfileState extends State<Profile> {
       }
     } catch (e) {
       print('Error fetching user data: $e');
-
       setState(() {
         isLoading = false;
       });
@@ -111,7 +88,24 @@ class _ProfileState extends State<Profile> {
         textDirection: TextDirection.rtl,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('حسابي'),
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    //Color(0xFFF6897F),
+                    Color(0xFF98DDEF),
+                    //Color(0xFFFFBF3E),
+                    //Color(0xFF137E86),
+                    //Color(0xFF60C5A8),
+                    //Color(0xFFD54873),
+                    Color(0xFFE27AA5),
+                    //Color(0xFFE97B11),
+                  ], // Replace with your desired colors
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
             actions: [
               Transform(
                 alignment: Alignment.center,
@@ -129,7 +123,7 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-              ),
+              )
             ],
           ),
           body: isLoading
@@ -142,34 +136,23 @@ class _ProfileState extends State<Profile> {
                         Padding(
                           padding: const EdgeInsets.all(20),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              CircleAvatar(
-                                radius: 50,
-                                backgroundImage: userData!['avatarUrl'] != null
-                                    ? NetworkImage(userData!['avatarUrl'])
-                                    : const AssetImage(
-                                        'images/user.png',
-                                      ) as ImageProvider,
-                              ),
                               const SizedBox(width: 20),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    userData!['name'] ?? 'No Name',
-                                    style: const TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
+                              Center(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      textAlign: TextAlign.center,
+                                      userData!['name'] ?? 'No Name',
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const Spacer(),
-                              IconButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/friends');
-                                },
-                                icon: const Icon(Icons.people),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -181,27 +164,9 @@ class _ProfileState extends State<Profile> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'البريد الالكتروني: ${userData!['email'] ?? 'No Email'}',
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                  const Spacer(),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.logout,
-                                      color: Color(0xFF3F4C5C),
-                                    ),
-                                    onPressed: () async {
-                                      await FirebaseAuth.instance.signOut();
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (c) => const Login()));
-                                    },
-                                  ),
-                                ],
+                              Text(
+                                'البريد الالكتروني: ${userData!['email'] ?? 'No Email'}',
+                                style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 10),
                               Text(
@@ -216,6 +181,7 @@ class _ProfileState extends State<Profile> {
                             ],
                           ),
                         ),
+
                         const Divider(),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -223,7 +189,7 @@ class _ProfileState extends State<Profile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'أعلى تقييم: ${userData!['highScore'] ?? 0}',
+                                'أعلى تقييم: ${userData!['correctRatio'] ?? 0}',
                                 style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 10),
@@ -231,17 +197,6 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         const Divider(),
-                        // User Activity Graph
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Container(
-                            height: 300, // Adjust height as needed
-                            child: UserActivityGraph(
-                              correctAnswersData: correctAnswers,
-                              wrongAnswersData: wrongAnswers,
-                            ),
-                          ),
-                        ),
                       ],
                     ),
         ),

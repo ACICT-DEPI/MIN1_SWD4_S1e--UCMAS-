@@ -1,11 +1,23 @@
 // ignore_for_file: library_private_types_in_public_api, file_names, use_build_context_synchronously
 
+<<<<<<< HEAD
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uc_mas_app/Screens/login.dart';
 import 'package:uc_mas_app/Screens/test_page.dart';
 import 'package:uc_mas_app/Screens/userProfile';
+=======
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:uc_mas_app/Screens/filtering_page.dart';
+import 'package:uc_mas_app/Screens/login.dart';
+import 'package:uc_mas_app/Screens/test_page.dart';
+import 'package:uc_mas_app/Screens/userProfile.dart';
+>>>>>>> 798ea12 (all done)
 import 'package:uc_mas_app/components/showSnackbar.dart';
 import 'package:uc_mas_app/components/test_types.dart';
 
@@ -99,10 +111,37 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
+=======
+    final _screenSize = min(
+        MediaQuery.of(context).size.width, MediaQuery.of(context).size.height);
+>>>>>>> 798ea12 (all done)
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Stack(
         children: [
+<<<<<<< HEAD
+=======
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  //Color(0xFFF6897F),
+                  Color(0xFF98DDEF),
+                  //Color(0xFFFFBF3E),
+                  //Color(0xFF137E86),
+                  //Color(0xFF60C5A8),
+                  //Color(0xFFD54873),
+                  Color(0xFFE27AA5),
+                  //Color(0xFFE97B11),
+                ], // Replace with your desired colors
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+
+>>>>>>> 798ea12 (all done)
           // AppBar with username and profile avatar
           Positioned(
             top: 40,
@@ -117,6 +156,7 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                       onTap: () {
                         Navigator.pushNamed(context, '/profile');
                       },
+<<<<<<< HEAD
                       child: const CircleAvatar(
                         radius: 25,
                         backgroundImage: AssetImage('images/user.png'),
@@ -124,6 +164,17 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                     ),
                     const SizedBox(width: 10),
                     Text('أهلا $_user'), // Dynamic username from Firestore
+=======
+                      child: Text(
+                        '$_user',
+                        style: TextStyle(
+                            fontSize: _screenSize * .07,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    // Dynamic username from Firestore
+>>>>>>> 798ea12 (all done)
                   ],
                 ),
                 Row(
@@ -142,6 +193,15 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                       },
                     ),
                     IconButton(
+<<<<<<< HEAD
+=======
+                      onPressed: () {
+                        Navigator.pushNamed(context, FilteringPage.id);
+                      },
+                      icon: const Icon(Icons.people),
+                    ),
+                    IconButton(
+>>>>>>> 798ea12 (all done)
                       icon: const Icon(
                         Icons.logout,
                         color: Color(0xFF3F4C5C),
@@ -193,6 +253,7 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
           ),
           // Floating Card with Top 5 Users
           Positioned(
+<<<<<<< HEAD
             top: 200,
             left: 20,
             right: 20,
@@ -324,6 +385,77 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                 ),
                 const SizedBox(height: 10),
               ],
+=======
+            top: 300,
+            left: 20,
+            right: 20,
+            child: IntrinsicWidth(
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  // Start Test Button
+                  // Level 1 Test Button (1)
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TestPage(
+                            testType: TestType.level1_1,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'المستوى الاول (1)',
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 20), // Spacing between buttons
+
+                  // Level 1 Test Button (2)
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TestPage(
+                            testType: TestType.level1_2,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'المستوى الاول (2)',
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 20), // Spacing between buttons
+
+                  // Comprehensive Level 1 Test Button
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TestPage(
+                            testType: TestType.level1,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'المستوى الاول شامل',
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
+>>>>>>> 798ea12 (all done)
             ),
           ),
           // Search Results List (Should appear above other widgets)
@@ -350,9 +482,12 @@ class _BackgroundWithWidgetsState extends State<CustomWidget> {
                         },
                         child: Text(user['name']),
                       ),
+<<<<<<< HEAD
                       leading: const CircleAvatar(
                         backgroundImage: AssetImage('images/user.png'),
                       ),
+=======
+>>>>>>> 798ea12 (all done)
                     );
                   },
                 ),

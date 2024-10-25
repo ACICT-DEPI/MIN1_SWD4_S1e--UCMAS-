@@ -58,14 +58,14 @@ class UCMASApp extends StatelessWidget {
           Login.id: (context) => const Login(),
           HomePage.id: (context) => HomePage(email: email ?? ''),
           //'/home/ranks':
-          '/profile':(context)=>const Profile(),
+          '/profile': (context) => const Profile(),
           //'/profile/friends':
           '/virtual-abacus': (context) => const VirtualAbacus(),
           //'/level1-test':
           //'/level2-test':
           //'/mixed-test':
           //'/test-result':
-          '/friends':(context)=>  FrindsPage(),
+          '/friends': (context) => FrindsPage(),
         },
       ),
     );
